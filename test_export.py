@@ -54,8 +54,9 @@ def recurse(container):
                     print(font_text, font_family, font_size, font_color, font_tracking)
 
                 recurse(layer)
+
     except AttributeError as attribute_error:
-        print(f'{attribute_error}: 'TypeLayer' object has no attribute layers'')
+        print(f'{attribute_error}')
 
 
 recurse(mobileArtboard)

@@ -2,6 +2,9 @@ from psd_tools import PSDImage
 import os
 import json
 from pathlib import Path
+from collections import namedtuple
+from bs4 import BeautifulSoup
+import re
 
 """ Export image from a photoshop file """
 psd = 'test.psd'
@@ -10,19 +13,27 @@ psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 module_list_from_psd = []
 
 
-def get_modules(container):
+def get_module_names_content(container):
     try:
         for layer in container.layers:
             if layer.visible and layer.kind == 'group':
-                print(layer.name)
-                module_list_from_psd.append(layer.name)
-                recurse(layer, name=layer.name)
+                """ Module list names """
+                """ ['TEXT_02'] """
+                name = [layer.name]
+                module_list_from_psd.append(name)
+
+                """ Module contents"""
+                """ ['TEXT_02', ['HEADER THREE', 'FuturaPT-Demi', '20px', '#1a1a1a', '0.08em']] """
+                recurse(layer, name=layer.name, module=name)
+
+        return module_list_from_psd
 
     except AttributeError as Argument:
-        print(f'{Argument}')
+        # print(f'{Argument}')
+        pass
 
 
-def recurse(container, name):
+def recurse(container, name, module):
     """
         Recursive loop over each layer to extract all the text
     """
@@ -51,23 +62,51 @@ def recurse(container, name):
                     font_tracking = f"{style_sheet[b'StyleSheet'][b'StyleSheetData'][b'Tracking'] / 1000:.2f}em"
 
                     """ Font Color """
-                    font_color = style_sheet[b'StyleSheet'][b'StyleSheetData'][b'FillColor'][b'Values']
+                    font_colour = style_sheet[b'StyleSheet'][b'StyleSheetData'][b'FillColor'][b'Values']
 
                     """ Font Color > Hex Code """
                     tuple_list = []
-                    for index, item in enumerate(font_color[1:4]):
+                    for index, item in enumerate(font_colour[1:4]):
                         tuple_list.append((int(round(item * 255))))
-                    font_color = '#%02x%02x%02x' % (tuple_list[0], tuple_list[1], tuple_list[2])
+                    font_colour = '#%02x%02x%02x' % (tuple_list[0], tuple_list[1], tuple_list[2])
 
-                    print(font_type, font_family, font_size, font_color, font_tracking)
+                    lst = [font_type, font_family, font_size, font_colour, font_tracking]
+                    module.append(lst)
 
-                recurse(layer, name=name)
+                recurse(layer, name=name, module=module)
 
     except AttributeError as Attribute:
         # print(f'{Attribute}')
         pass
 
 
+def get_module_html(name):
+    file = open('modules.json')
+    data = json.load(file)
+
+    for key, value in data.items():
+        if name == key:
+            return value
+
+
+def replace(name):
+    html = get_module_html(name[0])
+    font_type = name[1][0]
+    soup = BeautifulSoup(html, 'html.parser')
+    emails = soup.find_all('td')
+    print(emails)
+
+
 for i in psd_load.layers:
     if 'MOBILE'.lower() in i.name.lower():
-        get_modules(i)
+        """ Get module names from psd """
+        modules = get_module_names_content(i)
+        # for i in modules:
+        #     print(i[0])
+
+        """ Get module html from modules.json """
+        for mod in modules:
+            # get_module_html(mod[0])
+            # print(get_module_html(mod[0]))
+            """ replace """
+            replace(mod)
