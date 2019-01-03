@@ -1,12 +1,12 @@
 {
-    "TEXT_01": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true"},
-    "TEXT_02": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "true"},
-    "TEXT_03": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "true"},
-    "TEXT_04": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true"},
-    "TEXT_05": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true"},
-    "TEXT_06": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "false"},  // space in type, wrong font family
-    "TEXT_07": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "true"},
-    "TEXT_08": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true"},
+    "TEXT_01": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true", "script": "true"},
+    "TEXT_02": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "true", "script": "true"},
+    "TEXT_03": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "true", "script": "true"},
+    "TEXT_04": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true", "script": "true"},
+    "TEXT_05": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true", "script": "false"}, // Button
+    "TEXT_06": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "false", "script": "true"},  // space in type, wrong font family
+    "TEXT_07": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "true", "modify": "false", "script": "false"},  // format
+    "TEXT_08": {"type": "true", "font-family": "true", "font-size": "true", "font-color": "true", "font-spacing": "true", "order": "false", "modify": "true", "script": "false"},  // image in a tag
 
     "BUTTONS_01_M": "true",
     "BUTTONS_02_Long_M": "true",
