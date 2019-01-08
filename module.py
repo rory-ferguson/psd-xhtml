@@ -2,16 +2,14 @@ from psd_tools import PSDImage
 import os
 import json
 from pathlib import Path
-from collections import namedtuple
 from bs4 import BeautifulSoup, Tag
-import re
-from html.parser import HTMLParser
 
 """ Export image from a photoshop file """
-psd = 'test.psd'
+psd = 'launch.psd'
 psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 
-module_list_from_psd  = []
+module_list_from_psd = []
+BLUE, RED, WHITE, YELLOW, MAGENTA, GREEN, END = '\33[94m', '\033[91m', '\33[97m', '\33[93m', '\033[1;35m', '\033[1;32m', '\033[0m'
 
 
 def get_module_names_content(container):
@@ -76,8 +74,7 @@ def recurse(container, name, module):
 
                 recurse(layer, name=name, module=module)
 
-    except AttributeError as Attribute:
-        # print(f'{Attribute}')
+    except AttributeError:
         pass
 
 
@@ -105,7 +102,7 @@ def replace(name):
         'Ü': '&Uuml;', 'ü': '&uuml;', 'ß': '&szlig;',
         '‘': '&lsquo;', '’': '&rsquo;', '“': '&ldquo;',
         '”': '&rdquo;', '€': '&euro;', '£': '&pound;',
-        '…': '...'
+        '…': '...', '>': '&gt;', u'\xa0': '&nbsp;'
     }
 
     encoded_tags = []
@@ -113,14 +110,15 @@ def replace(name):
         a = [str(char).replace(char, encoding_dict.get(char, char)) for char in i]
         a = "".join(a)
         encoded_tags.append(a)
-    print(encoded_tags)
 
     if len(encoded_tags) == len(name) - 1:
         for i in encoded_tags:
             go += 1
             # print(i, name[go][0])
-            html = html.replace(i, name[go][0])
-    # print(html)
+            html = html.replace(i, name[go][0], 1)
+    else:
+        print(f'{{}}ALERT! {name[0]} module has not been updated.{{}} There are {len(encoded_tags)} html'
+              f' and {len(name) - 1} psd text containers.\n'.format(RED, END))
 
     return html
 
@@ -138,6 +136,8 @@ def write_out(html_list):
     f.close()
 
 
+print(f'The file {psd} being parsed.\n')
+
 for i in psd_load.layers:
     if 'MOBILE'.lower() in i.name.lower():
         """ Get module names from psd """
@@ -147,6 +147,11 @@ for i in psd_load.layers:
         """ Get module html from modules.json """
         for mod in modules:
             """ replace text in html """
-            html_list.append(replace(mod))
+            try:
+                if html_list.append(replace(mod)) == None:
+                    print(f'{mod[0]} is not a module')
+            except TypeError:
+                pass
+
             """ write out to file """
             write_out(html_list=html_list)
