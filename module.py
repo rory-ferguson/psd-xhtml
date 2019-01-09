@@ -5,7 +5,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
-psd = 'outdoors.psd'
+psd = 'test.psd'
 psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 
 module_list_from_psd = []
@@ -129,9 +129,19 @@ def write_out(html_list):
     with open('modules.htm', 'w') as f:
         for v in data:
             counter += 1
-            f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
-            f.write(v)
-            f.write('\n\t\t\t</div>\n\n')
+            """ Save image if counter length is less than 9 """
+
+            if counter <= 9:
+                f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
+                f.write(v)
+                f.write('\n\t\t\t</div>\n\n')
+
+            """ Save image if counter length is greater than 9 """
+            if counter > 9:
+                f.write(f'\t\t\t<div data-content-region-name="region_{counter}">\n')
+                f.write(v)
+                f.write('\n\t\t\t</div>\n\n')
+
 
     f.close()
 
