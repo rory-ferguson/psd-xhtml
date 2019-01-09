@@ -42,7 +42,7 @@ def recurse(container, name, module):
 
                     """ font_type """
                     # font_type = layer.text.rstrip().replace('\r', '\n').rstrip()
-                    font_type = layer.text.rstrip().replace('\r', '<br class="d_h" />')
+                    font_type = layer.text.rstrip().replace('\r', '<br class="d_h" /> ')
 
                     """ font_type using EngineData """
                     # print(str(layer.engine_data[b'EngineDict'][b'Editor'][b'Text']).rstrip().replace('\r', '\n'))
