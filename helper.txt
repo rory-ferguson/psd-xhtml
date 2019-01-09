@@ -1,3 +1,2 @@
-Removed <br class="d_h" /> from modules
-Need to look at &nbsp;&gt; encoding on buttons
-Image inside a tags break
+ - Remove <br class="d_h" /> from modules.json
+ - Images inside <a> break, look into fix
