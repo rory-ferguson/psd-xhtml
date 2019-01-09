@@ -5,7 +5,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
-psd = 'launch.psd'
+psd = 'outdoors.psd'
 psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 
 module_list_from_psd = []
@@ -42,7 +42,7 @@ def recurse(container, name, module):
 
                     """ font_type """
                     # font_type = layer.text.rstrip().replace('\r', '\n').rstrip()
-                    font_type = layer.text.rstrip().replace('\r', '<br class="d_d_b" />')
+                    font_type = layer.text.rstrip().replace('\r', '<br class="d_h" />')
 
                     """ font_type using EngineData """
                     # print(str(layer.engine_data[b'EngineDict'][b'Editor'][b'Text']).rstrip().replace('\r', '\n'))
@@ -147,9 +147,9 @@ for i in psd_load.layers:
         """ Get module html from modules.json """
         for mod in modules:
             """ replace text in html """
+            print(mod[0])
             try:
-                if html_list.append(replace(mod)) == None:
-                    print(f'{mod[0]} is not a module')
+                html_list.append(replace(mod))
             except TypeError:
                 pass
 
