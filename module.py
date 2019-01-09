@@ -142,7 +142,6 @@ def write_out(html_list):
                 f.write(v)
                 f.write('\n\t\t\t</div>\n\n')
 
-
     f.close()
 
 
