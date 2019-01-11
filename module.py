@@ -90,6 +90,9 @@ def get_module_html(name):
 
 
 def encode(a):
+    """
+        Iterate through each character in a string and replace with encoded version from encoding_dict
+    """
     b = []
     if isinstance(a, list):
         for item in a:
@@ -104,17 +107,28 @@ def encode(a):
     return b
 
 
+def no_blank(a):
+    """
+        Adds &nbsp; before the last word of each text string to prevent single words on one line
+    """
+    b = a.rsplit(' ', 1)
+    try:
+        if b[1]:
+            b[1] = f'&nbsp;{b[1]}'
+            b = ''.join(b)
+    except:
+        if b:
+            b = ''.join(b)
+    return b
+
 def replace(name):
     html = get_module_html(name[0])
     soup = BeautifulSoup(html, 'html.parser')
 
     module_text = []
-    print(soup)
     for a in soup.findAll('a'):
         if not a.find('img'):
             module_text.append(a.text)
-            print(a)
-            print(a.text)
     go = 0
     encode_module_text = encode(module_text)
 
@@ -122,7 +136,7 @@ def replace(name):
         for mod in encode_module_text:
             go += 1
             a = encode(name[go][0])
-            print(mod, a[0])
+            no_blank(a[0])
             html = html.replace(mod, a[0], 1)
     else:
         print(f'{{}}ALERT! {name[0]} module has not been updated.{{}} There are {len(encode_module_text)} html and {len(name) - 1} psd text containers.\n'.format(RED, END))
@@ -163,15 +177,9 @@ for i in psd_load.layers:
 
         html_list = []
         """ Get module html from modules.json """
-        # for mod in modules:
-        #     try:
-        #         if html_list.append(replace(mod)) is not None:
-        #             print(f'Found the following modules;')
-        #     except TypeError:
-        #         pass
         for mod in modules:
-            """ replace text in html """
             print(f'{{}}{mod[0]}{{}}'.format(BLUE, END))
+            """ replace text in html """
             try:
                 html_list.append(replace(mod))
             except TypeError:
