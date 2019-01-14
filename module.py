@@ -5,7 +5,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
-psd = 'test.psd'
+psd = 'Campaign1_CR_Mens.psd'
 psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 
 module_list_from_psd = []
@@ -120,6 +120,7 @@ def no_blank(a):
         if b:
             b = ''.join(b)
     return b
+
 
 def replace(name):
     html = get_module_html(name[0])
