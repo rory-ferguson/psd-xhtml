@@ -1,3 +1,2 @@
  - Remove <br class="d_h" /> from modules.json
  - Replace &nbsp;&gt; with ' >' from modules.json
- - Images inside <a> break, look into fix

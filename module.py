@@ -5,7 +5,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
-psd = 'Campaign1_CR_Mens.psd'
+psd = 'test.psd'
 psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 
 module_list_from_psd = []
