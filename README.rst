@@ -35,7 +35,7 @@ How To
 ------
 The email modules are located as json data inside ``modules.json``
 
-The ``module.py`` file will parse a psds initial group layers and match the names with the ``modules.json`` keys, the html will be initially be built from this.
+The ``module.py`` file will parse a psds initial group layers and match the names with the ``modules.json`` keys, the html will be initially built from this.
 
 If the text is parsed correctly, it will replace those values in the html.
 
