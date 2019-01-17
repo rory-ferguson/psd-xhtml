@@ -13,13 +13,6 @@ Installation
 ------------
 ``photoshop_email_generator`` requires the below packages
 
-
-psd-tools
-
-.. code-block:: bash
-
-    pip install psd-tools
-
 psd-tools2
 
 .. code-block:: bash
