@@ -5,13 +5,17 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
-psd = 'test.psd'
+user_directory = input('PSD path:')
 
-for file in os.listdir(os.path.dirname(__file__)):
+psd = input('PSD name:')
+
+path_of_psd = os.path.join(user_directory + '\\' + psd)
+
+for file in os.listdir(user_directory):
     if psd in file:
-        psd = file
+        path_of_psd = user_directory + '\\' + file
 
-psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
+psd_load = PSDImage.load(path_of_psd)
 
 module_list_from_psd = []
 
@@ -89,7 +93,7 @@ def recurse(container, name, module):
 
 
 def get_module_html(name):
-    file = open('modules.json')
+    file = open(user_directory + '\\' + 'modules.json')
     data = json.load(file)
     for key, value in data.items():
         if name == key:
@@ -155,7 +159,7 @@ def replace(name):
 def write_out(html_list):
     data = html_list
     counter = 4
-    with open('modules.htm', 'w') as f:
+    with open(user_directory + '\\' + 'modules.htm', 'w') as f:
         for v in data:
             counter += 1
 
