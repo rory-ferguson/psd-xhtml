@@ -1,4 +1,0 @@
-""" FuturaPT fonts to BrandonGrotesque """
-fonts = {'FuturaPT-Book': 'BrandonGrotesque-Regular',
-         'FuturaPT-Medium': 'BrandonGrotesque-Medium',
-         'FuturaPT-Demi': 'BrandonGrotesque-Bold'}
