@@ -44,3 +44,9 @@ If the text is parsed correctly, it will replace those values in the html.
 
 .. code-block:: bash
    python module.py
+   
+Notes for work
+--------------
+Remove <br class="d_h" /> in modules.json
+
+Replace &nbsp;&gt; with ' >' in modules.json
