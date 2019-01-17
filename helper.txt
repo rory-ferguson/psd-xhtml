@@ -1,2 +1,0 @@
- - Remove <br class="d_h" /> from modules.json
- - Replace &nbsp;&gt; with ' >' from modules.json
