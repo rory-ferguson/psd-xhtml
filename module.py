@@ -6,10 +6,17 @@ from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
 psd = 'test.psd'
+
+for file in os.listdir(os.path.dirname(__file__)):
+    if psd in file:
+        psd = file
+
 psd_load = PSDImage.load(Path(os.path.dirname(__file__)) / psd)
 
 module_list_from_psd = []
-BLUE, RED, WHITE, YELLOW, MAGENTA, GREEN, END = '\33[94m', '\033[91m', '\33[97m', '\33[93m', '\033[1;35m', '\033[1;32m', '\033[0m'
+
+BLUE, RED, END = '\33[94m', '\033[91m', '\033[0m'
+
 encoding_dict = {
     'Ä': '&Auml;', 'ä': '&auml;', 'É': '&Eacute;',
     'é': '&eacute;', 'Ö': '&Ouml;', 'ö': '&ouml;',
