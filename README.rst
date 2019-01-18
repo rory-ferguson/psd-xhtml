@@ -3,6 +3,7 @@ photoshop_email_generator
 
 ``photoshop_email_generator`` is a script to export information from a PSD file and generate html email content.
 
+
 Requires
 ------------
 Supports Python 3.6.7
@@ -11,13 +12,6 @@ Supports Python 3.6.7
 Installation
 ------------
 ``photoshop_email_generator`` requires the below packages
-
-
-psd-tools
-
-.. code-block:: bash
-
-    pip install psd-tools
 
 psd-tools2
 
@@ -30,7 +24,15 @@ Pillow
 .. code-block:: bash
 
    pip install Pillow==4.1.1
-   
+
+
+Example Directory
+-----------------
+Move the ``modules.json`` and ``test.psd`` from ``examples/`` into the parent directory.
+
+Use these files to test with.
+
+
 How To
 ------
 The email modules are located as json data inside ``modules.json``
@@ -45,6 +47,7 @@ If the text is parsed correctly, it will replace those values in the html.
 .. code-block:: bash
    python module.py
    
+
 Notes for work
 --------------
 Remove <br class="d_h" /> in modules.json
