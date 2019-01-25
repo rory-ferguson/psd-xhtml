@@ -5,6 +5,10 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 """ Export image from a photoshop file """
+BLUE, END = '\33[94m', '\033[0m'
+
+root = os.path.dirname(__file__)
+print(root)
 user_directory = input('PSD path:')
 
 psd = input('PSD name:')
@@ -15,7 +19,9 @@ for file in os.listdir(user_directory):
     if psd in file:
         path_of_psd = user_directory + '\\' + file
 
+print(f'\nLoading {{}}{psd}{{}}'.format(BLUE, END))
 psd_load = PSDImage.load(path_of_psd)
+print(f'Finished loading {{}}{psd}{{}}\n'.format(BLUE, END))
 
 module_list_from_psd = []
 
@@ -93,7 +99,7 @@ def recurse(container, name, module):
 
 
 def get_module_html(name):
-    file = open(user_directory + '\\' + 'modules.json')
+    file = open(root + '\\' + 'modules.json')
     data = json.load(file)
     for key, value in data.items():
         if name == key:
@@ -165,17 +171,17 @@ def write_out(html_list):
 
             """ Save image if counter length is less than 9 """
             if counter <= 9:
-                # f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
+                f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
                 f.write(v)
-                # f.write('\n\t\t\t</div>')
-                f.write('\n\n')
+                f.write('\n\t\t\t</div>')
+                # f.write('\n\n')
 
             """ Save image if counter length is greater than 9 """
             if counter > 9:
-                # f.write(f'\t\t\t<div data-content-region-name="region_{counter}">\n')
+                f.write(f'\t\t\t<div data-content-region-name="region_{counter}">\n')
                 f.write(v)
-                # f.write('\n\t\t\t</div>')
-                f.write('\n\n')
+                f.write('\n\t\t\t</div>')
+                # f.write('\n\n')
 
     f.close()
 
