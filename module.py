@@ -174,14 +174,14 @@ def write_out(html_list):
                 f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
                 f.write(v)
                 f.write('\n\t\t\t</div>')
-                # f.write('\n\n')
+                f.write('\n\n')
 
             """ Save image if counter length is greater than 9 """
             if counter > 9:
                 f.write(f'\t\t\t<div data-content-region-name="region_{counter}">\n')
                 f.write(v)
                 f.write('\n\t\t\t</div>')
-                # f.write('\n\n')
+                f.write('\n\n')
 
     f.close()
 
