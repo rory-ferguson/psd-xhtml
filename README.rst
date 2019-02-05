@@ -1,7 +1,10 @@
 photoshop_email_generator
 ==========
 
-``photoshop_email_generator`` is a script to export information from a PSD file and generate html email content.
+``photoshop_email_generator`` exports layer and text information from a photoshop file to generate html email content.
+
+This library is complemented by an automated image extractor `photoshop_email_image_exporter
+<https://github.com/Constuelo/photoshop_email_image_exporter>`_.
 
 
 Requires
@@ -14,16 +17,12 @@ Installation
 ``photoshop_email_generator`` requires the below packages
 
 psd-tools2
-
+`psd-tools2
+<https://github.com/kyamagu/psd-tools2>`_.
 .. code-block:: bash
 
-    pip install psd-tools2==1.7.30
+    pip install psd-tools2==1.8.5
 
-Pillow
-
-.. code-block:: bash
-
-   pip install Pillow==4.1.1
 
 
 Example Directory
