@@ -1,4 +1,4 @@
-from psd_tools import PSDImage
+from psd_tools2 import PSDImage
 import os
 import json
 from pathlib import Path
@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup, Tag
 BLUE, END = '\33[94m', '\033[0m'
 
 root = os.path.dirname(__file__)
-print(root)
+
 user_directory = input('PSD path:')
 
 psd = input('PSD name:')
@@ -20,7 +20,7 @@ for file in os.listdir(user_directory):
         path_of_psd = user_directory + '\\' + file
 
 print(f'\nLoading {{}}{psd}{{}}'.format(BLUE, END))
-psd_load = PSDImage.load(path_of_psd)
+psd_load = PSDImage.open(path_of_psd)
 print(f'Finished loading {{}}{psd}{{}}\n'.format(BLUE, END))
 
 module_list_from_psd = []
@@ -39,7 +39,7 @@ encoding_dict = {
 
 def get_module_names_content(container):
     try:
-        for layer in container.layers:
+        for layer in reversed(list(container)):
             if layer.visible and layer.kind == 'group':
                 """ Module list names """
                 """ ['TEXT_02'] """
@@ -47,60 +47,35 @@ def get_module_names_content(container):
                 module_list_from_psd.append(name)
                 """ Module contents"""
                 """ ['TEXT_02', ['HEADER THREE', 'FuturaPT-Demi', '20px', '#1a1a1a', '0.08em']] """
-                recurse(layer, name=layer.name, module=name)
+                recurse(layer, m=name)
 
         return module_list_from_psd
 
-    except AttributeError as Argument:
-        # print(f'{Argument}')
+    except AttributeError:
         pass
 
 
-def recurse(container, name, module):
+def recurse(container, m):
     """
         Recursive loop over each layer to extract all the text
     """
     try:
-        for layer in container.layers:
+        for layer in reversed(list(container.descendants())):
             if layer.visible:
                 if layer.kind == 'type':
-
                     """ font_type """
-                    # font_type = layer.text.rstrip().replace('\r', '\n').rstrip()
-                    # font_type = layer.text.rstrip().replace('\r', '<br class="d_h" /> ')
                     font_type = layer.text.rstrip().replace('\r', ' ')
 
-                    """ Font Size """
-                    style_sheet = layer.engine_data[b'EngineDict'][b'StyleRun'][b'RunArray'][0]
-                    font_size = f"{round(style_sheet[b'StyleSheet'][b'StyleSheetData'][b'FontSize'] / 2)}px"
-
-                    """ Font Family """
-                    font_family = layer.fontset[0][b'Name']
-
-                    """ Font tracking """
-                    font_tracking = f"{style_sheet[b'StyleSheet'][b'StyleSheetData'][b'Tracking'] / 1000:.2f}em"
-
-                    """ Font Color """
-                    font_colour = style_sheet[b'StyleSheet'][b'StyleSheetData'][b'FillColor'][b'Values']
-
-                    """ Font Color > Hex Code """
-                    tuple_list = []
-                    for index, item in enumerate(font_colour[1:4]):
-                        tuple_list.append((int(round(item * 255))))
-                    font_colour = '#%02x%02x%02x' % (tuple_list[0], tuple_list[1], tuple_list[2])
-
-                    lst = [font_type, font_family, font_size, font_colour, font_tracking]
-                    module.append(lst)
-
-                recurse(layer, name=name, module=module)
+                    lst = [font_type]
+                    m.append(lst)
 
     except AttributeError:
         pass
 
 
 def get_module_html(name):
-    file = open(root + '\\' + 'modules.json')
-    data = json.load(file)
+    f = open(root + '\\' + 'modules.json')
+    data = json.load(f)
     for key, value in data.items():
         if name == key:
             return value
@@ -129,13 +104,14 @@ def no_blank(a):
         Adds &nbsp; before the last word of each text string to prevent single words on one line
     """
     b = a.rsplit(' ', 1)
-    try:
-        if b[1]:
-            b[1] = f'&nbsp;{b[1]}'
-            b = ''.join(b)
-    except:
-        if b:
-            b = ''.join(b)
+
+    if b[1]:
+        b[1] = f'&nbsp;{b[1]}'
+        b = ''.join(b)
+
+    elif b:
+        b = ''.join(b)
+
     return b
 
 
@@ -151,19 +127,20 @@ def replace(name):
     encode_module_text = encode(module_text)
 
     if len(encode_module_text) == len(name) - 1:
-        for mod in encode_module_text:
+        for m in encode_module_text:
             go += 1
             a = encode(name[go][0])
             no_blank(a[0])
-            html = html.replace(mod, a[0], 1)
+            html = html.replace(m, a[0], 1)
     else:
-        print(f'{{}}ALERT! {name[0]} module has not been updated.{{}} There are {len(encode_module_text)} html and {len(name) - 1} psd text containers.\n'.format(RED, END))
+        print(f'{{}}ALERT! {name[0]} module has not been updated.{{}} '
+              f'There are {len(encode_module_text)} html and {len(name) - 1} psd text containers.\n'.format(RED, END))
 
     return html
 
 
-def write_out(html_list):
-    data = html_list
+def write_out(lst):
+    data = lst
     counter = 4
     with open(user_directory + '\\' + 'modules.htm', 'w') as f:
         for v in data:
@@ -188,20 +165,20 @@ def write_out(html_list):
 
 print(f'The file {{}}{psd}{{}} is being parsed.\n'.format(BLUE, END))
 
-for i in psd_load.layers:
+for i in psd_load:
     if 'MOBILE'.lower() in i.name.lower():
         """ Get module names from psd """
         modules = get_module_names_content(i)
 
-        html_list = []
+        html_lst = []
         """ Get module html from modules.json """
         for mod in modules:
             print(f'{{}}{mod[0]}{{}}'.format(BLUE, END))
             """ replace text in html """
             try:
-                html_list.append(replace(mod))
+                html_lst.append(replace(mod))
             except TypeError:
                 pass
 
             """ write out to file """
-            write_out(html_list=html_list)
+            write_out(lst=html_lst)
