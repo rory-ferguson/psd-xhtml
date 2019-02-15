@@ -77,7 +77,7 @@ def get_module_html(name):
     f = open(root + '\\' + 'modules.json')
     data = json.load(f)
     for key, value in data.items():
-        if name == key:
+        if name.strip() == key.strip():
             return value
 
 
