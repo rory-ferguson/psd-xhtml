@@ -1,8 +1,7 @@
-from psd_tools2 import PSDImage
+from psd_tools import PSDImage
 import os
 import json
-from pathlib import Path
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 """ Export image from a photoshop file """
 BLUE, END = '\33[94m', '\033[0m'
