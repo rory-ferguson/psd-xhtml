@@ -16,8 +16,13 @@ Installation
 ------------
 ``photoshop_email_generator`` requires the below packages
 
+<<<<<<< HEAD
 `psd-tools2
 <https://github.com/kyamagu/psd-tools2>`_
+=======
+`psd-tools
+<https://github.com/psd-tools/psd-tools>`_
+>>>>>>> 11b6b1051535ffd0bd68575dc11d513714595b7b
 
 .. code-block:: bash
 
