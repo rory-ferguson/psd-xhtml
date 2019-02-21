@@ -32,7 +32,7 @@ encoding_dict = {
     'Ü': '&Uuml;', 'ü': '&uuml;', 'ß': '&szlig;',
     '‘': '&lsquo;', '’': '&rsquo;', '“': '&ldquo;',
     '”': '&rdquo;', '€': '&euro;', '£': '&pound;',
-    '…': '...', u'\xa0': '&nbsp;'
+    '…': '...', u'\xa0': '&nbsp;', '–': '-'
 }
 
 
