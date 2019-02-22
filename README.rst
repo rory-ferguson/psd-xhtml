@@ -1,5 +1,5 @@
 photoshop_email_generator
-==========
+=========================
 
 ``photoshop_email_generator`` exports layer and text information from a photoshop file to generate html email content.
 
@@ -16,17 +16,12 @@ Installation
 ------------
 ``photoshop_email_generator`` requires the below packages
 
-<<<<<<< HEAD
-`psd-tools2
-<https://github.com/kyamagu/psd-tools2>`_
-=======
 `psd-tools
-<https://github.com/psd-tools/psd-tools>`_
->>>>>>> 11b6b1051535ffd0bd68575dc11d513714595b7b
+<https://github.com/psd-tools/psd-tools>`_.
 
 .. code-block:: bash
 
-    pip install psd-tools2==1.8.5
+    pip install psd-tools
 
 
 
@@ -49,8 +44,9 @@ The ``module.py`` file will parse a psds initial group layers and match the name
 If the psd text is parsed correctly, it will replace those values in the html.
 
 .. code-block:: bash
+
    python module.py
-   
+
 
 Notes for work
 --------------
