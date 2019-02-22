@@ -2,6 +2,7 @@ from psd_tools import PSDImage
 import os
 import json
 from bs4 import BeautifulSoup
+from pathlib import Path
 
 """ Export image from a photoshop file """
 BLUE, END = '\33[94m', '\033[0m'
@@ -16,7 +17,7 @@ path_of_psd = os.path.join(user_directory + '\\' + psd)
 
 for file in os.listdir(user_directory):
     if psd in file:
-        path_of_psd = user_directory + '\\' + file
+        path_of_psd = Path(user_directory).joinpath(file)
 
 print(f'\nLoading {{}}{psd}{{}}'.format(BLUE, END))
 psd_load = PSDImage.open(path_of_psd)
@@ -32,7 +33,7 @@ encoding_dict = {
     'Ü': '&Uuml;', 'ü': '&uuml;', 'ß': '&szlig;',
     '‘': '&lsquo;', '’': '&rsquo;', '“': '&ldquo;',
     '”': '&rdquo;', '€': '&euro;', '£': '&pound;',
-    '…': '...', u'\xa0': '&nbsp;', '–': '-'
+    '…': '...', u'\xa0': '&nbsp;', '–': '&ndash;'
 }
 
 
@@ -73,7 +74,7 @@ def recurse(container, m):
 
 
 def get_module_html(name):
-    f = open(root + '\\' + 'modules.json')
+    f = open(Path(root).joinpath('modules.json'))
     data = json.load(f)
     for key, value in data.items():
         if name.strip() == key.strip():
@@ -141,7 +142,7 @@ def replace(name):
 def write_out(lst):
     data = lst
     counter = 4
-    with open(user_directory + '\\' + 'modules.htm', 'w') as f:
+    with open(Path(user_directory).joinpath('modules.htm'), 'w') as f:
         for v in data:
             counter += 1
 
