@@ -13,11 +13,22 @@ user_directory = input('PSD path:')
 
 psd = input('PSD name:')
 
-path_of_psd = os.path.join(user_directory + '\\' + psd)
+if psd:
+    for file in os.listdir(user_directory):
+        if psd in file:
+            psd = file
+            path_of_psd = Path(user_directory).joinpath(file)
+            break
 
-for file in os.listdir(user_directory):
-    if psd in file:
-        path_of_psd = Path(user_directory).joinpath(file)
+if not psd:
+    for file in os.listdir(user_directory):
+        if '.psb' in file or '.psd' in file:
+            psd = file
+            path_of_psd = Path(user_directory).joinpath(file)
+            break
+
+if not path_of_psd:
+    path_of_psd = Path(user_directory).joinpath(psd)
 
 print(f'\nLoading {{}}{psd}{{}}'.format(BLUE, END))
 psd_load = PSDImage.open(path_of_psd)
