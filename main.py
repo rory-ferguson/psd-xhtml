@@ -51,7 +51,7 @@ encoding_dict = {
 def get_module_names_content(container):
     try:
         for layer in reversed(list(container)):
-            if layer.visible and layer.kind == 'group':
+            if layer.is_visible() and layer.kind == 'group':
                 """ Module list names """
                 """ ['TEXT_02'] """
                 name = [layer.name]
@@ -72,7 +72,7 @@ def recurse(container, m):
     """
     try:
         for layer in reversed(list(container.descendants())):
-            if layer.visible:
+            if layer.is_visible():
                 if layer.kind == 'type':
                     """ font_type """
                     font_type = layer.text.rstrip().replace('\r', ' ')
@@ -111,17 +111,21 @@ def encode(a):
 
 
 def no_blank(a):
-    """
+    """ this feature needs work and is not active
         Adds &nbsp; before the last word of each text string to prevent single words on one line
     """
-    b = a.rsplit(' ', 1)
+    try:
+        b = a.rsplit(' ', 1)
 
-    if b[1]:
-        b[1] = f'&nbsp;{b[1]}'
-        b = ''.join(b)
+        if b[1]:
+            b[1] = f'&nbsp;{b[1]}'
+            b = ''.join(b)
 
-    elif b:
-        b = ''.join(b)
+        if not b[1]:
+            b = ''.join(b)
+
+    except IndexError:
+        pass
 
     return b
 
@@ -141,7 +145,9 @@ def replace(name):
         for m in encode_module_text:
             go += 1
             a = encode(name[go][0])
+            """ this feature needs work and is not active
             no_blank(a[0])
+            """
             html = html.replace(m, a[0], 1)
     else:
         print(f'{{}}ALERT! {name[0]} module has not been updated.{{}} '
@@ -180,7 +186,6 @@ for i in psd_load:
     if 'MOBILE'.lower() in i.name.lower():
         """ Get module names from psd """
         modules = get_module_names_content(i)
-
         html_lst = []
         """ Get module html from modules.json """
         for mod in modules:
@@ -190,6 +195,7 @@ for i in psd_load:
                 html_lst.append(replace(mod))
             except TypeError:
                 pass
+
 
             """ write out to file """
             write_out(lst=html_lst)
