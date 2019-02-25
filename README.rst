@@ -39,13 +39,13 @@ The email modules are located as json data inside ``modules.json``
 To generate the json file use the `json_generator
 <https://github.com/Constuelo/json_generator>`_.
 
-The ``module.py`` file will parse a psds initial group layers and match the names with the ``modules.json`` key/values, the html will be initially built from this.
+The ``main.py`` file will parse a psds initial group layers and match the names with the ``modules.json`` key/values, the html will be initially built from this.
 
 If the psd text is parsed correctly, it will replace those values in the html.
 
 .. code-block:: bash
 
-   python module.py
+   python main.py
 
 
 Notes for work
