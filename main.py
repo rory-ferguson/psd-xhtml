@@ -1,6 +1,7 @@
 from psd_tools import PSDImage
 import os
 import json
+import sys
 from bs4 import BeautifulSoup
 from pathlib import Path
 
@@ -184,6 +185,7 @@ print(f'The file {{}}{psd}{{}} is being parsed.\n'.format(BLUE, END))
 
 for i in psd_load:
     if 'MOBILE'.lower() in i.name.lower():
+        mobileArtboard = i
         """ Get module names from psd """
         modules = get_module_names_content(i)
         html_lst = []
@@ -199,3 +201,10 @@ for i in psd_load:
 
             """ write out to file """
             write_out(lst=html_lst)
+
+
+if mobileArtboard is None:
+    print('There was a problem.')
+    print('Please ensure the artboard names include one of the below')
+    print('_Desktop or _Mobile')
+    sys.exit()
