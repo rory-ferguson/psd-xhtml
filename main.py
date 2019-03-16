@@ -4,8 +4,9 @@ import json
 from bs4 import BeautifulSoup
 from pathlib import Path
 
-""" Export image from a photoshop file """
-BLUE, END = '\33[94m', '\033[0m'
+module_list_from_psd = []
+
+BLUE, RED, END = '\33[94m', '\033[91m', '\033[0m'
 
 root = os.path.dirname(__file__)
 
@@ -33,19 +34,6 @@ if not path_of_psd:
 print(f'\nLoading {{}}{psd}{{}}'.format(BLUE, END))
 psd_load = PSDImage.open(path_of_psd)
 print(f'Finished loading {{}}{psd}{{}}\n'.format(BLUE, END))
-
-module_list_from_psd = []
-
-BLUE, RED, END = '\33[94m', '\033[91m', '\033[0m'
-
-encoding_dict = {
-    'Ä': '&Auml;', 'ä': '&auml;', 'É': '&Eacute;',
-    'é': '&eacute;', 'Ö': '&Ouml;', 'ö': '&ouml;',
-    'Ü': '&Uuml;', 'ü': '&uuml;', 'ß': '&szlig;',
-    '‘': '&lsquo;', '’': '&rsquo;', '“': '&ldquo;',
-    '”': '&rdquo;', '€': '&euro;', '£': '&pound;',
-    '…': '...', u'\xa0': '&nbsp;', '–': '&ndash;'
-}
 
 
 def get_module_names_content(container):
@@ -96,6 +84,14 @@ def encode(a):
     """
         Iterate through each character in a string and replace with encoded version from encoding_dict
     """
+    encoding_dict = {
+        'Ä': '&Auml;', 'ä': '&auml;', 'É': '&Eacute;',
+        'é': '&eacute;', 'Ö': '&Ouml;', 'ö': '&ouml;',
+        'Ü': '&Uuml;', 'ü': '&uuml;', 'ß': '&szlig;',
+        '‘': '&lsquo;', '’': '&rsquo;', '“': '&ldquo;',
+        '”': '&rdquo;', '€': '&euro;', '£': '&pound;',
+        '…': '...', u'\xa0': '&nbsp;', '–': '&ndash;'
+    }
     b = []
     if isinstance(a, list):
         for item in a:
