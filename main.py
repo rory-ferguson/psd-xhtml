@@ -74,7 +74,10 @@ def recurse(container, m):
 
 
 def get_module_html(name):
-    f = open(Path(root).joinpath('modules.json'))
+    try:
+        f = open(Path(root).joinpath('modules.json'))
+    except FileNotFoundError:
+        sys.exit('modules.json is missing from the repository, check the README')
     data = json.load(f)
     for key, value in data.items():
         if name.strip() == key.strip():
