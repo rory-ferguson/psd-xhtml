@@ -4,10 +4,9 @@ import json
 import sys
 from bs4 import BeautifulSoup
 from pathlib import Path
+from colorama import Fore, Style
 
 module_list_from_psd = []
-
-BLUE, RED, END = '\33[94m', '\033[91m', '\033[0m'
 
 root = os.path.dirname(__file__)
 
@@ -32,9 +31,9 @@ if not psd:
 if not path_of_psd:
     path_of_psd = Path(user_directory).joinpath(psd)
 
-print(f'\nLoading {{}}{psd}{{}}'.format(BLUE, END))
+print(f'\nLoading {Fore.BLUE}{psd}{Style.RESET_ALL}')
 psd_load = PSDImage.open(path_of_psd)
-print(f'Finished loading {{}}{psd}{{}}\n'.format(BLUE, END))
+print(f'Finished loading {Fore.BLUE}{psd}{Style.RESET_ALL}\n')
 
 
 def get_module_names_content(container):
@@ -56,8 +55,7 @@ def get_module_names_content(container):
 
 
 def recurse(container, m):
-    """
-        Recursive loop over each layer to extract all the text
+    """ Recursive loop over each layer to extract all the text
     """
     try:
         for layer in reversed(list(container.descendants())):
@@ -74,6 +72,8 @@ def recurse(container, m):
 
 
 def get_module_html(name):
+    """ Get html matching json key with name
+    """
     try:
         f = open(Path(root).joinpath('modules.json'))
     except FileNotFoundError:
@@ -85,8 +85,7 @@ def get_module_html(name):
 
 
 def encode(a):
-    """
-        Iterate through each character in a string and replace with encoded version from encoding_dict
+    """ Iterate through each character in a string and replace with encoded version from encoding_dict
     """
     encoding_dict = {
         'Ä': '&Auml;', 'ä': '&auml;', 'É': '&Eacute;',
@@ -150,8 +149,8 @@ def replace(name):
             """
             html = html.replace(m, a[0], 1)
     else:
-        print(f'{{}}ALERT! {name[0]} module has not been updated.{{}} '
-              f'There are {len(encode_module_text)} html and {len(name) - 1} psd text containers.\n'.format(RED, END))
+        print(f'{Fore.RED}ALERT! {name[0]} module has not been updated.{Style.RESET_ALL} '
+              f'There are {len(encode_module_text)} html and {len(name) - 1} psd text containers.\n')
 
     return html
 
@@ -179,8 +178,7 @@ def write_out(lst):
 
     f.close()
 
-
-print(f'The file {{}}{psd}{{}} is being parsed.\n'.format(BLUE, END))
+print(f'The file {Fore.BLUE}{psd}{Style.RESET_ALL} is being parsed.\n')
 
 for i in psd_load:
     if 'MOBILE'.lower() in i.name.lower():
@@ -190,7 +188,7 @@ for i in psd_load:
         html_lst = []
         """ Get module html from modules.json """
         for mod in modules:
-            print(f'{{}}{mod[0]}{{}}'.format(BLUE, END))
+            print(f'{Fore.BLUE}{mod[0]}{Style.RESET_ALL}'.format(BLUE, END))
             """ replace text in html """
             try:
                 html_lst.append(replace(mod))
