@@ -188,7 +188,7 @@ for i in psd_load:
         html_lst = []
         """ Get module html from modules.json """
         for mod in modules:
-            print(f'{Fore.BLUE}{mod[0]}{Style.RESET_ALL}'.format(BLUE, END))
+            print(f'{Fore.BLUE}{mod[0]}{Style.RESET_ALL}')
             """ replace text in html """
             try:
                 html_lst.append(replace(mod))
