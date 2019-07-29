@@ -9,7 +9,7 @@ This library is complemented by an automated image extractor `photoshop_email_im
 
 Requires
 ------------
-Supports Python 3.6.7
+Supports Python 3.6+
 
 
 Installation
