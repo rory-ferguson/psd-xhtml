@@ -129,7 +129,6 @@ def write_out(data):
     with open(Path(user_directory).joinpath('modules.htm'), 'w') as f:
         for v in data:
             counter += 1
-
             """ Save image if counter length is less than 9 """
             if counter <= 9:
                 f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
@@ -148,7 +147,6 @@ def write_out(data):
 
 def get_artboard():
     for artboard in psd_load:
-        print(artboard)
         if 'MOBILE'.lower() in artboard.name.lower() and artboard.kind == 'artboard':
             return artboard
     if not artboard:  
@@ -156,13 +154,13 @@ def get_artboard():
         print(f'Please ensure the artboard name includes "mobile"')
         sys.exit()
     
-
 def layer_list(artboard):
     lst = []
     for layer in reversed(list(artboard)):
         if (
             layer.is_visible() 
             and layer.kind == 'group'
+            and 'header'.lower() not in layer.name.lower()
         ):
             lst.append(layer)
     return lst
@@ -170,8 +168,14 @@ def layer_list(artboard):
 def main(modules):
     lst = []
     for module in modules:
-        if module.is_visible() and module.kind == 'group':
-            lst.append((module.name, extract_module_text(module)))
+        if (
+            module.is_visible() 
+            and module.kind == 'group'
+        ):
+            try:
+                lst.append((module.name, extract_module_text(module)))
+            except KeyError as e:
+                pass
         else:
             lst.append(module.name)
     return lst
