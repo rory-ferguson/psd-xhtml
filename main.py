@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from src.colour_to_hex import colour_to_hex
 from src.encode import encode
+from src.helpers import psd_name
 
 root = os.path.dirname(__file__)
 
@@ -18,7 +19,7 @@ def extract_module_text(module):
         for layer in reversed(list(module)):
             if (
                 layer.is_visible() 
-                and layer.kind == 'smartobject' 
+                and layer.kind == 'smartobject'
                 and 'spacer'.lower() in layer.name.lower()
             ):
                 lst.append(layer.name)
@@ -147,13 +148,14 @@ def write_out(data):
 
 def get_artboard():
     for artboard in psd_load:
+        print(artboard)
         if 'MOBILE'.lower() in artboard.name.lower() and artboard.kind == 'artboard':
             return artboard
-
-        else:
-            print(f'There was a problem.')
-            print(f'Please ensure the artboard name includes "mobile"')
-            sys.exit()
+    if not artboard:  
+        print(f'There was a problem.')
+        print(f'Please ensure the artboard name includes "mobile"')
+        sys.exit()
+    
 
 def layer_list(artboard):
     lst = []
@@ -178,7 +180,9 @@ def main(modules):
 if __name__ == "__main__":
     user_directory = input('PSD path:')
 
-    psd = input('PSD name:')
+    psd = psd_name(
+        user_directory, message="PSD name (can be blank or without file extension):"
+    )
 
     print(f'\nLoading {psd}')
     path_of_psd = Path(user_directory).joinpath(psd)
