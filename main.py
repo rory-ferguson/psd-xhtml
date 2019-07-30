@@ -16,7 +16,7 @@ root = os.path.dirname(__file__)
 def extract_module_text(module):
     lst = []
     try:
-        for layer in reversed(list(module)):
+        for layer in reversed(list(module.descendants())):
             if (
                 layer.is_visible() 
                 and layer.kind == 'smartobject'
@@ -44,6 +44,7 @@ def extract_module_text(module):
 def get_module_html(name):
     """ Get html matching json key with name
     """
+    name = remove_copy(name.strip())
     try:
         f = open(Path(root).joinpath('modules.json'))
     except FileNotFoundError:
@@ -53,7 +54,7 @@ def get_module_html(name):
         if name.strip() == key.strip():
             return value
 
-def replace(key, value):
+def replace_text_in_html(key, value):
     html = get_module_html(key)
     soup = BeautifulSoup(html, 'html.parser')
     html_module_text = []
@@ -128,21 +129,23 @@ def write_out(data):
     counter = 4
     with open(Path(user_directory).joinpath('modules.htm'), 'w') as f:
         for v in data:
-            counter += 1
-            """ Save image if counter length is less than 9 """
-            if counter <= 9:
-                f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
-                f.write(v)
-                f.write('\n\t\t\t</div>')
-                f.write('\n\n')
+            if isinstance(v, str):
+                counter += 1
+                """ Save image if counter length is less than 9 """
+                if counter <= 9:
+                    f.write(f'\t\t\t<div data-content-region-name="region_0{counter}">\n')
+                    f.write(v)
+                    f.write('\n\t\t\t</div>')
+                    f.write('\n\n')
 
-            """ Save image if counter length is greater than 9 """
-            if counter > 9:
-                f.write(f'\t\t\t<div data-content-region-name="region_{counter}">\n')
-                f.write(v)
-                f.write('\n\t\t\t</div>')
-                f.write('\n\n')
-
+                """ Save image if counter length is greater than 9 """
+                if counter > 9:
+                    f.write(f'\t\t\t<div data-content-region-name="region_{counter}">\n')
+                    f.write(v)
+                    f.write('\n\t\t\t</div>')
+                    f.write('\n\n')
+            else:
+                print(type(v))
     f.close()
 
 def get_artboard():
@@ -180,35 +183,48 @@ def main(modules):
             lst.append(module.name)
     return lst
 
+def remove_copy(name):
+    return str(name).replace(" copy", "")
+
+def other(modules):
+    lst = []
+    for i in modules:
+        name = i[0]
+        value = i[1]
+        if isinstance(i, tuple) and 'DYNAMIC_TEXT'.lower() in name.lower():
+            lst.append(dynamic_text(name, value))
+        elif isinstance(i, tuple) and len(value) > 0:
+            try:
+                lst.append(replace_text_in_html(name, value))
+                print(name)
+            except TypeError as e:
+                print(f'{name} not included.')
+                lst.append('')
+        else:
+            lst.append(get_module_html(name))
+            print(name)
+    return lst
+
 
 if __name__ == "__main__":
     user_directory = input('PSD path:')
-
+    
     psd = psd_name(
         user_directory, message="PSD name (can be blank or without file extension):"
     )
 
     print(f'\nLoading {psd}')
-    path_of_psd = Path(user_directory).joinpath(psd)
-    psd_load = PSDImage.open(path_of_psd)
+    psd_load = PSDImage.open(Path(user_directory).joinpath(psd))
     print(f'Finished loading {psd}\n')
     print(f'The file {psd} is being parsed.\n')
 
     artboard = get_artboard()
+
     layers = layer_list(artboard)
-    
+
     if artboard:
         modules = main(layers)
 
-    html_data = []
-    for i in modules:
-        name = i[0]
-        value = i[1]
-        if isinstance(i, tuple) and 'DYNAMIC_TEXT'.lower() in name.lower():
-            html_data.append(dynamic_text(name, value))
-        elif isinstance(i, tuple) and len(value) > 0:
-            html_data.append(replace(name, value))
-        else:
-            html_data.append(get_module_html(name))
-
+    html_data = other(modules)
+    
     write_out(data=html_data)
