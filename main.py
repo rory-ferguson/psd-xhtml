@@ -86,12 +86,19 @@ def dynamic_text(key, value):
     lst = []
     for layer in value:
         if isinstance(layer, list):
+            if 'Header'.lower() in layer[0].lower():
+                name = 'Header'
+            elif 'Paragraph'.lower() in layer[0].lower():
+                name = 'Paragraph'
+            else:
+                name = name
             try:
-                with open(Path(resources).joinpath(f'{layer[0]}.htm'), 'r') as module_html:
+                with open(Path(resources).joinpath(f'{name}.htm'), 'r') as module_html:
                     data = module_html.read()
                     font_type = encode(layer[1])[0]
                     data = data.replace('{{ font_type }}', str(font_type))
                     data = data.replace('{{ font_size }}', str(layer[2]))
+                    data = data.replace('{{ line_height }}', str(layer[2]))
                     data = data.replace('{{ font_tracking }}', str(layer[3]))
                     data = data.replace('{{ font_color }}', str(layer[4]))
                     lst.append(data)
