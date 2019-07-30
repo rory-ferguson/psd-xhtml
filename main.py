@@ -176,15 +176,15 @@ def main(modules):
 
 
 if __name__ == "__main__":
-    # user_directory = input('PSD path:')
-    user_directory = 'C:\\Users\\rory.ferguson\\Documents\\test\\email_module'
-    # psd = input('PSD name:')
-    psd = 'text.psd'
+    user_directory = input('PSD path:')
+
+    psd = input('PSD name:')
+
+    print(f'\nLoading {psd}')
     path_of_psd = Path(user_directory).joinpath(psd)
-    # print(f'\nLoading {psd}')
     psd_load = PSDImage.open(path_of_psd)
-    # print(f'Finished loading {psd}\n')
-    # print(f'The file {psd} is being parsed.\n')
+    print(f'Finished loading {psd}\n')
+    print(f'The file {psd} is being parsed.\n')
 
     artboard = get_artboard()
     layers = layer_list(artboard)
