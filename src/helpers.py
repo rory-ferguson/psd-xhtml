@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from pathlib import Path
 
 
@@ -37,7 +38,7 @@ def directory_exists(path: str) -> bool:
 def get_module_html_from_json(root, name):
     """ Get html matching json key with name
     """
-    name = remove_copy(" copy", name.strip())
+    name = clean_name(name.strip())
     try:
         f = open(Path(root).joinpath("modules.json"))
     except FileNotFoundError:
@@ -48,8 +49,12 @@ def get_module_html_from_json(root, name):
             return value
 
 
-def remove_copy(string, name):
-    return str(name).replace(string, "")
+def clean_name(name):
+    return re.split(' ', name)[0]
+
+
+def convert_to_m(name):
+    return re.split('(_D)', name)[0] + '_M'
 
 
 def write_to_file(path, data):
@@ -88,3 +93,12 @@ def parse_module_text(soup):
         if not a.find("img"):
             lst.append(a.text)
     return lst
+
+
+def add_nbsp_to_last_word(word):
+    word = word.rsplit(' ', 1)
+    if len(word) > 1:
+        word[1] = f'&nbsp;{word[1]}'
+        return ''.join(word)
+    else:
+        return ''.join(word)
