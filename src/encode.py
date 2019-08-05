@@ -30,6 +30,3 @@ def encode(word):
         word = "".join(word)
         encoded_word.append(word)
     return ''.join(encoded_word)
-
-if __name__ == "__main__":
-    print(encode('Phasellus eget abc tgd.'))
