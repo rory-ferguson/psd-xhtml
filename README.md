@@ -40,9 +40,3 @@ To use the dynamic text module, include a layer in the PSD called `DYNAMIC_TEXT`
 The photoshop file must include;
 
 - Artboards
-
-## Notes for work
-
-- Remove `<br class="d_h" />` in `modules.json`
-
-- Replace `&nbsp;&gt;` with `' >'` in `modules.json`
