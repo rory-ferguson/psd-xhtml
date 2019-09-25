@@ -90,3 +90,4 @@ if __name__ == "__main__":
     html_data = replace_module_with_html(modules)
 
     write_to_file(path=user_directory, data=html_data)
+    write_modules_lost(user_directory, modules)
