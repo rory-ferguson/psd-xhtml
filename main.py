@@ -14,6 +14,7 @@ from src.helpers import (
     get_module_html_from_json,
     parse_module_text,
     add_nbsp_to_last_word,
+    write_modules_list
 )
 
 root = os.path.dirname(__file__)
@@ -90,4 +91,4 @@ if __name__ == "__main__":
     html_data = replace_module_with_html(modules)
 
     write_to_file(path=user_directory, data=html_data)
-    write_modules_lost(user_directory, modules)
+    write_modules_list(path=user_directory, modules=modules)
