@@ -1,0 +1,20 @@
+[
+    {
+        "01": {
+            "HERO_A_Top_850_M": {
+                "Image_Name": "Mobile_01.jpg",
+                "Image_Path": "/Modular/AW19/Email_Name/Country",
+                "Module_Name": "HERO_A_Top_850_M",
+                "URL": "htts://www.joules.com/",
+                "Font-Styles": {
+                    "Name": "For the (really) little ones", 
+                    "Type": "For the (really) little ones", 
+                    "Font_Size": 25, 
+                    "Letter-Spacing": "0.03", 
+                    "Font-Colour": "#1a1a1a"
+                },
+                "Button-Styles": {}
+            }
+        }
+    }
+]
