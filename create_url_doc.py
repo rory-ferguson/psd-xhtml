@@ -2,6 +2,13 @@ import xlsxwriter
 import os
 from pathlib import Path
 
+from psd_tools import PSDImage
+
+from src.psdtools import list_of_psd_layers, list_of_modules, get_mobile_artboard
+from src.helpers import (
+    psd_filename
+)
+
 modules_dict = {
     "1COL_A_Scale_850_M": "1",
     "1COL_C_Scale_780_M": "1",
@@ -27,12 +34,12 @@ modules_dict = {
     "2COL_K_Scale_380_M": "2",
     "2COL_L_Scale_415_M": "2",
     "2COL_N_Scale_325_M": "2",
-    "TEXT_2COL_A_780_M": "2",
-    "TEXT_2COL_B_780_M": "2",
-    "TEXT_2COL_C_780_M": "2",
-    "TEXT_2COL_D_Offset_M": "2",
-    "TEXT_2COL_E_Offset_M": "2",
-    "TEXT_2COL_F_Scale_380_M": "2",
+    "TEXT_2COL_A_780_M": "4",
+    "TEXT_2COL_B_780_M": "4",
+    "TEXT_2COL_C_780_M": "4",
+    "TEXT_2COL_D_Offset_M": "4",
+    "TEXT_2COL_E_Offset_M": "4",
+    "TEXT_2COL_F_Scale_380_M": "4",
     "2COL_B_Wrap_850_M": "2",
     "2COL_C_Wrap_Switch_850_M": "2",
     "2COL_F_Wrap_780_M": "2",
@@ -98,15 +105,8 @@ modules_dict = {
     "TEXT_08": "1",
 }
 
-WORKBOOK = 'modules.xlsx'
-
-# user_path = Path("C:\\Users\\Rory.Ferguson\\test")
-user_path = input('Path:')
-module_list = 'modules.txt'
-module_path = Path(user_path).joinpath(module_list)
-
-def create_xlsx():
-    loc = Path(user_path).joinpath(WORKBOOK)
+def create_xlsx(modules):
+    loc = Path(user_directory).joinpath(WORKBOOK)
     wb = xlsxwriter.Workbook(loc)
     ws = wb.add_worksheet()
 
@@ -134,7 +134,7 @@ def create_xlsx():
     ws.write('E1', 'URL 4')
 
     counter = 0
-    for name in get_modules(module_path):
+    for name in modules:
         counter += 1
         row = counter
         links = match_module_value(name, modules_dict)
@@ -148,17 +148,37 @@ def create_xlsx():
         ws.write(row, 0, name)
     wb.close()
 
-def get_modules(module_path):
-    lst = []
-    with open(module_path, 'r') as file:
-        for i in file:
-            name = i.rstrip('\n')
-            lst.append(name)
-        return lst
-
 def match_module_value(name, modules_dict):
     for key, value in modules_dict.items():
         if name.strip() == key.strip():
             return value
 
-create_xlsx()
+def modules_names(layers):
+    lst = []
+    for i in layers:
+        lst.append(i.name)
+    return lst
+
+if __name__ == "__main__":
+    WORKBOOK = 'modules.xlsx'
+
+    # user_directory = Path("C:\\Users\\Rory.Ferguson\\test")
+    user_directory = input('PSD path:')
+
+    psd = psd_filename(
+        user_directory, message="PSD name (can be blank or without file extension):"
+    )
+
+    print(f"\nLoading {psd}")
+    psd_load = PSDImage.open(Path(user_directory).joinpath(psd))
+    print(f"Finished loading {psd}\n")
+    print(f"The file {psd} is being parsed.\n")
+
+    artboard = get_mobile_artboard(psd_load)
+
+    layers = list_of_psd_layers(artboard)
+
+    if artboard:
+        modules = modules_names(layers)
+
+    create_xlsx(modules)
