@@ -4,10 +4,11 @@ from pathlib import Path
 
 from psd_tools import PSDImage
 
-from src.psdtools import list_of_psd_layers, list_of_modules, get_mobile_artboard
+from src.psdtools import module_names, mobile_artboard
 from src.helpers import (
     psd_filename
 )
+from config import WORKBOOK
 
 modules_dict = {
     "1COL_A_Scale_850_M": "1",
@@ -153,17 +154,11 @@ def match_module_value(name, modules_dict):
         if name.strip() == key.strip():
             return value
 
-def modules_names(layers):
-    lst = []
-    for i in layers:
-        lst.append(i.name)
-    return lst
-
 if __name__ == "__main__":
-    WORKBOOK = 'modules.xlsx'
+    from config import WORKBOOK
 
-    # user_directory = Path("C:\\Users\\Rory.Ferguson\\test")
-    user_directory = input('PSD path:')
+    # user_directory = input('PSD path:')
+    user_directory = Path("C:\\Users\\Rory.Ferguson\\test")
 
     psd = psd_filename(
         user_directory, message="PSD name (can be blank or without file extension):"
@@ -174,11 +169,8 @@ if __name__ == "__main__":
     print(f"Finished loading {psd}\n")
     print(f"The file {psd} is being parsed.\n")
 
-    artboard = get_mobile_artboard(psd_load)
+    artboard = mobile_artboard(psd_load)
 
-    layers = list_of_psd_layers(artboard)
-
-    if artboard:
-        modules = modules_names(layers)
+    modules = module_names(artboard)
 
     create_xlsx(modules)

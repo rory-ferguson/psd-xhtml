@@ -1,12 +1,21 @@
 import os
 from pathlib import Path
+from pprint import pprint
+import json
 
 from psd_tools import PSDImage
 from bs4 import BeautifulSoup
 
 from src.encode import encode
 from src.dynamic_text import dynamic_text
-from src.psdtools import list_of_psd_layers, list_of_modules, get_mobile_artboard
+from src.psdtools import (
+    artboard_layers, 
+    module_groups, 
+    mobile_artboard, 
+    module_names,
+    extract_psd_module_text,
+    extract_psd_module_button
+)
 from src.helpers import (
     psd_filename,
     convert_to_m,
@@ -14,7 +23,8 @@ from src.helpers import (
     get_module_html_from_json,
     parse_module_text,
     add_nbsp_to_last_word,
-    write_modules_list
+    write_modules_list,
+    convert_digit_length
 )
 
 root = os.path.dirname(__file__)
@@ -68,27 +78,71 @@ def replace_module_with_html(modules):
         print(name)
     return lst
 
+def collate_data(modules):
+    """ Collate data from the into dict/json and export
+    """
+    count = 0
+    image_count = 0
+
+    data = dict()
+    for module in modules:
+        count += 1
+        name = []
+
+        data[count] = dict()
+
+        # Module_Name
+        data[count]["Module_Name"] = module.name
+
+        # Images
+        if module.kind == "group" and module.visible:
+            for layer in reversed(list(module)):
+                if (
+                    "image".lower() in layer.name.lower()
+                    and layer.kind == "group"
+                    and layer.visible
+                ):
+                    image_count += 1
+                    
+                    name.append(convert_digit_length(image_count))
+                    data[count]["Images"] = name
+
+        # Font Styles
+        text_styles = extract_psd_module_text(module)
+        if text_styles:
+            data[count]["Text_Styles"] = text_styles
+
+        # Button Styles
+        button_styles = extract_psd_module_button(module)
+        if button_styles:
+            data[count]["Button_Styles"] = button_styles
+
+    with open('module_data.json', 'w') as fp:
+        json.dump(data, fp)
+
 
 if __name__ == "__main__":
-    user_directory = input('PSD path:')
+    # user_directory = input('PSD path:')
+    user_directory = 'C:\\Users\\Rory.Ferguson\\test'
 
-    psd = psd_filename(
+    psd_name = psd_filename(
         user_directory, message="PSD name (can be blank or without file extension):"
     )
 
-    print(f"\nLoading {psd}")
-    psd_load = PSDImage.open(Path(user_directory).joinpath(psd))
-    print(f"Finished loading {psd}\n")
-    print(f"The file {psd} is being parsed.\n")
+    print(f"\nLoading {psd_name}")
+    psd = PSDImage.open(Path(user_directory).joinpath(psd_name))
+    print(f"Finished loading {psd_name}\n")
+    print(f"The file {psd_name} is being parsed.\n")
 
-    artboard = get_mobile_artboard(psd_load)
+    artboard = mobile_artboard(psd)
 
-    layers = list_of_psd_layers(artboard)
+    layers = artboard_layers(artboard)
 
-    if artboard:
-        modules = list_of_modules(layers)
+    modules = module_groups(layers)
 
-    html_data = replace_module_with_html(modules)
+    collate_data(modules)
 
-    write_to_file(path=user_directory, data=html_data)
-    write_modules_list(path=user_directory, modules=modules)
+    # html_data = replace_module_with_html(modules)
+    
+    # write_to_file(path=user_directory, data=html_data)
+    # write_modules_list(path=user_directory, modules=modules)

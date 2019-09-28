@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 
-def colour_to_hex(colour):
+def floating_point_to_hex(colour):
     """ Convert floating point colour to hex
     """
     t = []
@@ -13,6 +13,10 @@ def colour_to_hex(colour):
             t.append((int(round(item * 255))))
         return "#%02x%02x%02x" % (t[0], t[1], t[2])
 
+def rgb_to_hex(colour):
+    """ Convert rgb colour to hex
+    """
+    return "#%02x%02x%02x" % tuple(colour)
 
 def psd_filename(path: str, message: str):
     user_input = input(f"{message}\n")
@@ -65,7 +69,6 @@ def write_to_file(path, data):
         for v in data:
             if isinstance(v, str):
                 counter += 1
-                """ Save image if counter length is less than 9 """
                 if counter <= 9:
                     f.write(
                         f'\t\t\t<div data-content-region-name="region_0{counter}">\n'
@@ -74,7 +77,6 @@ def write_to_file(path, data):
                     f.write("\n\t\t\t</div>")
                     f.write("\n\n")
 
-                """ Save image if counter length is greater than 9 """
                 if counter > 9:
                     f.write(
                         f'\t\t\t<div data-content-region-name="region_{counter}">\n'
@@ -106,3 +108,11 @@ def add_nbsp_to_last_word(word):
         return ''.join(word)
     else:
         return ''.join(word)
+
+
+def convert_digit_length(count):
+    if isinstance(count, int):
+        if count <= 9:
+            return f"0{count}"
+        else:
+            return f"{count}"
