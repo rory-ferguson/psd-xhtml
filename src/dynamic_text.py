@@ -54,7 +54,7 @@ def dynamic_text(root, key, value):
                 print(e)
 
         elif isinstance(layer, str) and 'spacer'.lower() in layer.lower():
-            height = spacer_height(layer)
+            height = round(float(spacer_height(layer)) / 2)
             try:
                 if n is not 0 and n is not len(value)-1:
                     height = height_calc_rendered(height, value[n-1], value[n+1])

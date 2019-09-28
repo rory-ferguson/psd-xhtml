@@ -86,6 +86,10 @@ def write_to_file(path, data):
                 print(type(v))
     f.close()
 
+def write_modules_list(path, modules):
+    with open(Path(path).joinpath("modules.txt"), "w") as file:
+        file.writelines(i[0] + '\n' for i in modules)
+        file.close()
 
 def parse_module_text(soup):
     lst = []
