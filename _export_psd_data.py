@@ -15,9 +15,10 @@ from src.psdtools import (
 )
 from src.helpers import (
     psd_filename,
-    convert_digit_length
+    convert_digit_length,
+    json_dump
 )
-from CONFIG import MODULE_DATA
+from config import MODULE_DATA
 
 root = os.path.dirname(__file__)
 
@@ -30,13 +31,12 @@ def collate_data(modules, user_directory):
 
     data = dict()
     for module in modules:
-        count += 1
         name = []
 
         data[count] = dict()
 
-        # Module_Name
-        data[count]["Module_Name"] = module.name
+        # Module
+        data[count]["Module"] = module.name
 
         # Images
         if module.kind == "group" and module.visible:
@@ -60,9 +60,10 @@ def collate_data(modules, user_directory):
         button_styles = extract_psd_module_button(module)
         if button_styles:
             data[count]["Button_Styles"] = button_styles
+            
+        count += 1
 
-    with open(Path(user_directory).joinpath(MODULE_DATA), 'w') as fp:
-        json.dump(data, fp)
+    json_dump(Path(user_directory).joinpath(MODULE_DATA), data, 'w')
 
 
 if __name__ == "__main__":

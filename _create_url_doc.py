@@ -4,9 +4,14 @@ from pathlib import Path
 
 from psd_tools import PSDImage
 
-from src.psdtools import module_names, mobile_artboard
+from src.psdtools import (
+    module_names, 
+    mobile_artboard, 
+    module_names_validated
+)
 from src.helpers import (
-    psd_filename
+    psd_filename,
+    load_json
 )
 from config import WORKBOOK
 
@@ -160,9 +165,10 @@ if __name__ == "__main__":
     # user_directory = input('PSD path:')
     user_directory = Path("C:\\Users\\Rory.Ferguson\\test")
 
-    psd = psd_filename(
-        user_directory, message="PSD name (can be blank or without file extension):"
-    )
+    # psd = psd_filename(
+    #     user_directory, message="PSD name (can be blank or without file extension):"
+    # )
+    psd = 'asd.psd'
 
     print(f"\nLoading {psd}")
     psd_load = PSDImage.open(Path(user_directory).joinpath(psd))
@@ -171,6 +177,7 @@ if __name__ == "__main__":
 
     artboard = mobile_artboard(psd_load)
 
-    modules = module_names(artboard)
+    json = load_json(Path(os.path.dirname(os.path.abspath(__file__))).joinpath('modules.json'))
+    modules = module_names_validated(json, artboard)
 
     create_xlsx(modules)

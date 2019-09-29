@@ -116,3 +116,11 @@ def convert_digit_length(count):
             return f"0{count}"
         else:
             return f"{count}"
+
+def load_json(path):
+    with open(path) as f:
+        return json.load(f)
+
+def json_dump(path, data, method):
+    with open(path, method) as fp:
+        json.dump(data, fp)

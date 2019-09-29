@@ -2,7 +2,12 @@ import sys
 
 from psd_tools.constants import Tag
 
-from src.helpers import floating_point_to_hex, rgb_to_hex
+from src.helpers import (
+    floating_point_to_hex, 
+    rgb_to_hex, 
+    clean_name,
+    convert_to_m
+)
 from src.encode import encode
 
 
@@ -17,17 +22,36 @@ def artboard_layers(artboard):
             lst.append(layer)
     return lst
 
-
 def module_names(layers):
     """ Return a list of the modules names
         ['1COL_B_Swap_850_M']
     """
     lst = []
-    for module in layers:
+    for module in reversed(list(layers)):
+        print(module)
         if module.is_visible() and module.kind == "group":
             lst.append(module.name)
     return lst
 
+def module_names_validated(json, layers):
+    """ Return a list of the modules names, validated by modules.json
+        ['1COL_B_Swap_850_M']
+    """
+    lst = []
+    for module in reversed(list(layers)):
+        if module.is_visible() and module.kind == "group":
+            name = module.name
+            name = clean_name(name.strip())
+            if 'button'.lower() in name.lower():
+                name = convert_to_m(name)
+            print(name)
+            if name in json:
+                """
+                remove ' copy' etc
+                replace _D > _M
+                """
+                lst.append(name)
+    return lst
 
 def module_groups(layers: list) -> list:
     """ Return a list of each modules Group information
