@@ -61,7 +61,7 @@ def write_to_file(path, data):
     """ Write out html to file
     """
     counter = 4
-    with open(Path(path).joinpath("modules.htm"), "w") as f:
+    with open(Path(path).joinpath("modules.htm"), "w", encoding="utf-8") as f:
         for v in data:
             if isinstance(v, str):
                 counter += 1
