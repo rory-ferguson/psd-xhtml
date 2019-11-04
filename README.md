@@ -1,6 +1,6 @@
 # psd-xhtml
 
-A program to export data from a PSD files layers to generate HTML.
+A program to export data from a PSDs layers to generate HTML.
 
 ## Installation and Requirements
 
@@ -13,7 +13,7 @@ Install the dependency packages [psd-tools](https://github.com/psd-tools/psd-too
     pip install -r requirements.txt
 ```
 
-## How do i run this?
+## How do i run this
 
 Run the following inside a terminal
 
@@ -35,4 +35,4 @@ The text is also parsed from the PSD and inserted/replace in the HTML
 
 The photoshop file must include;
 
-- Artboards
+- An Artboard, with `Mobile` in the name
