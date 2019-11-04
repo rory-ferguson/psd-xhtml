@@ -5,8 +5,11 @@ from psd_tools import PSDImage
 from bs4 import BeautifulSoup
 
 from src.encode import encode
-from src.dynamic_text import dynamic_text
-from src.psdtools import list_of_psd_layers, list_of_modules, get_mobile_artboard
+from src.psdtools import (
+    list_of_psd_layers, 
+    list_of_modules, 
+    get_mobile_artboard
+)
 from src.helpers import (
     psd_filename,
     convert_to_m,
