@@ -4,6 +4,8 @@ A program to export data from a PSDs layers to generate HTML.
 
 ## Installation and Requirements
 
+This program will not run without a `modules.json` of your html modules. You can generate a `json` file using this [json_generator](https://github.com/Constuelo/json_generator) script.
+
 Requires atleast Python 3.6
 
 Install the dependency packages [psd-tools](https://github.com/psd-tools/psd-tools), [requests](https://github.com/psf/requests) and [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.html).
@@ -20,8 +22,6 @@ Run the following inside a terminal
 ``` terminal
     python main.py
 ```
-
-There's some files in `example/` you can use, just move the `modules.json` in to the parent directory.
 
 ## How does it work
 
